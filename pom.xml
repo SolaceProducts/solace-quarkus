@@ -14,15 +14,15 @@
   <version>${revision}${sha1}${changelist}</version>
   <packaging>pom</packaging>
   <name>Quarkus Solace - Parent</name>
-  <url>https://github.com/SolaceLabs/solace-quarkus</url>
+  <url>https://github.com/SolaceProducts/solace-quarkus</url>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/SolaceLabs/solace-quarkus/issues</url>
+    <url>https://github.com/SolaceProducts/solace-quarkus/issues</url>
   </issueManagement>
   <scm>
-    <connection>scm:git:git@github.com:SolaceLabs/solace-quarkus.git</connection>
-    <developerConnection>scm:git:git@github.com:SolaceLabs/solace-quarkus.git</developerConnection>
-    <url>https://github.com/SolaceLabs/solace-quarkus</url>
+    <connection>scm:git:git@github.com:SolaceProducts/solace-quarkus.git</connection>
+    <developerConnection>scm:git:git@github.com:SolaceProducts/solace-quarkus.git</developerConnection>
+    <url>https://github.com/SolaceProducts/solace-quarkus</url>
   </scm>
 
   <properties>
@@ -231,11 +231,11 @@
       <distributionManagement>
         <repository>
           <id>github</id>
-          <url>https://maven.pkg.github.com/SolaceLabs/solace-quarkus</url>
+          <url>https://maven.pkg.github.com/SolaceProducts/solace-quarkus</url>
         </repository>
         <snapshotRepository>
           <id>github</id>
-          <url>https://maven.pkg.github.com/SolaceLabs/solace-quarkus</url>
+          <url>https://maven.pkg.github.com/SolaceProducts/solace-quarkus</url>
         </snapshotRepository>
       </distributionManagement>
     </profile>
