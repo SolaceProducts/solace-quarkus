@@ -32,17 +32,9 @@ public class SolaceMessageUtils {
             SDTMap mapPayload = mapMessage.getMap();
             if (mapPayload == null) {
                 return "";
-            } else {
-                try {
-                    return mapPayload.toString();
-                } catch (Exception e) {
-                    //                    if (logger.isWarnEnabled()) {
-                    //                        logger.warn("SDT message PayloadAsString conversion failed.", e);
-                    //                    }
-
-                    return "";
-                }
             }
+
+            return mapPayload.toString();
         }
     }
 

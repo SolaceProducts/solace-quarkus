@@ -69,6 +69,7 @@ public class OidcProvider {
                         try {
                             service.setProperty(JCSMPProperties.OAUTH2_ACCESS_TOKEN, lastToken.getAccessToken());
                         } catch (JCSMPException e) {
+                            Log.error("Failed to update access token for Solace connection", e);
                             throw new RuntimeException(e);
                         }
                         Log.info("Updated Solace Session with latest access token");

@@ -14,10 +14,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>com.solace</groupId>-->
-<!--      <artifactId>solace-messaging-client</artifactId>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>com.solacesystems</groupId>
       <artifactId>sol-jcsmp</artifactId>

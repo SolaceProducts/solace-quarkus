@@ -46,7 +46,7 @@ public class SolaceRecorder {
 
                 String authScheme = (String) properties.get(SolaceProperties.AuthenticationProperties.SCHEME);
 
-                if (oidcProvider != null && authScheme != null && "AUTHENTICATION_SCHEME_OAUTH2".equals(authScheme)) {
+                if (oidcProvider != null && "AUTHENTICATION_SCHEME_OAUTH2".equals(authScheme)) {
                     properties.put(SolaceProperties.AuthenticationProperties.SCHEME_OAUTH2_ACCESS_TOKEN,
                             oidcProvider.getToken().getAccessToken());
                 }
