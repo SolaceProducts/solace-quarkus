@@ -48,15 +48,15 @@ public class SolaceRecorder {
                 try {
                     if (reference.isUnsatisfied()) {
                         service = JCSMPFactory.onlyInstance().createSession(properties, null,
-                                sessionEventArgs -> SolaceRecorder.this.handleEvent(sessionEventArgs, oidcProvider,
-                                        authScheme));
+                                sessionEventArgs -> SolaceRecorder.handleEvent(sessionEventArgs, oidcProvider,
+                                        authScheme, service));
                     } else {
                         if (!reference.isResolvable()) {
                             throw new IllegalStateException("Multiple MessagingServiceClientCustomizer instances found");
                         } else {
                             service = JCSMPFactory.onlyInstance().createSession(reference.get().customize(properties), null,
-                                    sessionEventArgs -> SolaceRecorder.this.handleEvent(sessionEventArgs, oidcProvider,
-                                            authScheme));
+                                    sessionEventArgs -> SolaceRecorder.handleEvent(sessionEventArgs, oidcProvider,
+                                            authScheme, service));
                         }
                     }
 
@@ -80,7 +80,8 @@ public class SolaceRecorder {
         };
     }
 
-    private void handleEvent(SessionEventArgs sessionEventArgs, OidcProvider oidcProvider, String authScheme) {
+    private static void handleEvent(SessionEventArgs sessionEventArgs, OidcProvider oidcProvider, String authScheme,
+            JCSMPSession service) {
         if (sessionEventArgs.getEvent().equals(SessionEvent.RECONNECTING)) {
             Log.info("Reconnecting to Solace broker due to " + sessionEventArgs.getInfo());
             if (oidcProvider != null && authScheme != null && "AUTHENTICATION_SCHEME_OAUTH2".equals(authScheme)) {

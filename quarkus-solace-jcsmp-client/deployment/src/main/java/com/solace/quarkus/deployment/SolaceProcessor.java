@@ -84,7 +84,6 @@ class SolaceProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     @Consume(SyntheticBeansRuntimeInitBuildItem.class)
-    @Consume(SolaceBuildItem.class)
     void initMetrics(SolaceBuildTimeConfig btConfig, Optional<MetricsCapabilityBuildItem> metrics,
             SolaceMetricBinder metricRecorder) {
         if (metrics.isPresent() && btConfig.metrics().enabled()) {
