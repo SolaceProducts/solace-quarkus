@@ -15,15 +15,11 @@ import io.smallrye.mutiny.subscription.UniEmitter;
 class SolaceErrorTopicPublisherHandler implements PersistentMessagePublisher.MessagePublishReceiptListener {
 
     private final MessagingService solace;
-    private final PersistentMessagePublisher publisher;
+    private PersistentMessagePublisher publisher;
     private final OutboundErrorMessageMapper outboundErrorMessageMapper;
 
     public SolaceErrorTopicPublisherHandler(MessagingService solace) {
         this.solace = solace;
-
-        publisher = solace.createPersistentMessagePublisherBuilder().build();
-        publisher.setMessagePublishReceiptListener(this);
-        publisher.start();
         outboundErrorMessageMapper = new OutboundErrorMessageMapper();
     }
 
@@ -36,12 +32,18 @@ class SolaceErrorTopicPublisherHandler implements PersistentMessagePublisher.Mes
         //        }
         return Uni.createFrom().<PublishReceipt> emitter(e -> {
             try {
+                publisher = solace.createPersistentMessagePublisherBuilder().build();
+                publisher.setMessagePublishReceiptListener(this);
+                publisher.start();
                 // always wait for error message publish receipt to ensure it is successfully spooled on broker.
                 publisher.publish(outboundMessage, Topic.of(errorTopic), e);
             } catch (Throwable t) {
                 e.fail(t);
             }
-        }).onFailure().invoke(t -> SolaceLogging.log.publishException(errorTopic, t));
+        }).onItem().invoke(() -> publisher.terminate(5000)).onFailure().invoke(t -> {
+            SolaceLogging.log.publishException(errorTopic, t);
+            publisher.terminate(5000);
+        });
     }
 
     @Override

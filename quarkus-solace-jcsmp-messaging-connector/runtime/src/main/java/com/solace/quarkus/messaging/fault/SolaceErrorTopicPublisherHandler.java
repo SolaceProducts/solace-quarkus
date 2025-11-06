@@ -8,15 +8,12 @@ import com.solacesystems.jcsmp.*;
 import io.smallrye.mutiny.Uni;
 
 class SolaceErrorTopicPublisherHandler {
-    private final XMLMessageProducer publisher;
+    private XMLMessageProducer publisher;
     private final OutboundErrorMessageMapper outboundErrorMessageMapper;
+    private final JCSMPSession solace;
 
     public SolaceErrorTopicPublisherHandler(JCSMPSession solace) {
-        try {
-            publisher = solace.createProducer(new ProducerFlowProperties(), new PublishReceipt());
-        } catch (JCSMPException e) {
-            throw new RuntimeException(e);
-        }
+        this.solace = solace;
         outboundErrorMessageMapper = new OutboundErrorMessageMapper();
     }
 
@@ -29,6 +26,7 @@ class SolaceErrorTopicPublisherHandler {
         //        }
         return Uni.createFrom().<Object> emitter(e -> {
             try {
+                publisher = solace.createProducer(new ProducerFlowProperties(), new PublishReceipt());
                 // always wait for error message publish receipt to ensure it is successfully spooled on broker.
                 outboundMessage.setCorrelationKey(e);
                 publisher.send(outboundMessage, JCSMPFactory.onlyInstance().createTopic(errorTopic));
