@@ -29,12 +29,11 @@ class SolaceErrorTopicPublisherHandler implements PersistentMessagePublisher.Mes
         OutboundMessage outboundMessage = outboundErrorMessageMapper.mapError(this.solace.messageBuilder(),
                 message.getMessage(),
                 dmqEligible, timeToLive);
-        //        }
+        publisher = solace.createPersistentMessagePublisherBuilder().build();
+        publisher.setMessagePublishReceiptListener(this);
+        publisher.start();
         return Uni.createFrom().<PublishReceipt> emitter(e -> {
             try {
-                publisher = solace.createPersistentMessagePublisherBuilder().build();
-                publisher.setMessagePublishReceiptListener(this);
-                publisher.start();
                 // always wait for error message publish receipt to ensure it is successfully spooled on broker.
                 publisher.publish(outboundMessage, Topic.of(errorTopic), e);
             } catch (Throwable t) {

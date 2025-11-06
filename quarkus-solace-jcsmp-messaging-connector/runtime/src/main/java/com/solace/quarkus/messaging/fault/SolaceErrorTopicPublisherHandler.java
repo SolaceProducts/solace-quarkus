@@ -24,9 +24,14 @@ class SolaceErrorTopicPublisherHandler {
                 message.getMessage(),
                 dmqEligible, timeToLive);
         //        }
+        try {
+            publisher = solace.createProducer(new ProducerFlowProperties(), new PublishReceipt());
+        } catch (JCSMPException e) {
+            SolaceLogging.log.publishException(errorTopic, e);
+            throw new RuntimeException(e);
+        }
         return Uni.createFrom().<Object> emitter(e -> {
             try {
-                publisher = solace.createProducer(new ProducerFlowProperties(), new PublishReceipt());
                 // always wait for error message publish receipt to ensure it is successfully spooled on broker.
                 outboundMessage.setCorrelationKey(e);
                 publisher.send(outboundMessage, JCSMPFactory.onlyInstance().createTopic(errorTopic));
