@@ -25,7 +25,7 @@ For instance, with Maven, add the following dependency to your POM file:
 <dependency>
     <groupId>com.solace.quarkus</groupId>
     <artifactId>quarkus-solace-client</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
 </dependency>
 ----
 
@@ -42,11 +42,49 @@ For instance, with Maven, add the following dependency to your POM file:
 <dependency>
     <groupId>com.solace.quarkus</groupId>
     <artifactId>quarkus-solace-messaging-connector</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
 </dependency>
 ----
 
-NOTE: Solace Quarkus Extension 3.1.0 is based on Quarkus 3.15.x with Java 17 as baseline.
+NOTE: Solace Quarkus Extension 3.1.1 is based on Quarkus 3.15.x with Java 17 as baseline.
+
+Starting from 3.1.1 the extension also supports Solace JCSMP API alongside Solace Java Messaging API. This extension can be used in two ways
+
+{empty}1. `com.solace.quarkus:quarkus-solace-jcsmp-client`
+
+This extension provides only Solace JCSMP Messaging API and users need to have their own implementation and configuration to interact with Solace PubSub+ broker.
+
+If you want to use this extension, you need to add the `com.solace.quarkus:quarkus-solace-jcsmp-client` extension first to your build file.
+
+For instance, with Maven, add the following dependency to your POM file:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>com.solace.quarkus</groupId>
+    <artifactId>quarkus-solace-jcsmp-client</artifactId>
+    <version>3.1.1</version>
+</dependency>
+----
+
+{empty}2. `com.solace.quarkus:quarkus-solace-jcsmp-messaging-connector`
+
+This extension is based on reactive messaging framework and provides pre-defined configurations for incoming and outgoing channels.
+
+If you want to use this extension, you need to add the `com.solace.quarkus:quarkus-solace-jcsmp-messaging-connector` extension first to your build file.
+
+For instance, with Maven, add the following dependency to your POM file:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>com.solace.quarkus</groupId>
+    <artifactId>quarkus-solace-jcsmp-messaging-connector</artifactId>
+    <version>3.1.1</version>
+</dependency>
+----
+
+NOTE: All configurations are supported, except for back-pressure configuration.
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
@@ -71,7 +109,7 @@ include::includes/quarkus-solace-extension-common.adoc[leveloffset=+1, opts=opti
 [[configuring-quarkus-solace-client]]
 == Configuring Quarkus Solace Client
 
-Solace Broker supports different ways to connect and authenticate users. This section shows how to pass <<quarkus-solace_quarkus.solace-extra, extra properties>> to quarkus solace client in different scenarios. Please refer to https://docs.solace.com/API-Developer-Online-Ref-Documentation/pubsubplus-java/constant-values.html#com.solace.messaging.config.SolaceProperties[Solace Properties] for supported properties and definitions.
+Solace Broker supports different ways to connect and authenticate users. This section shows how to pass <<quarkus-solace_quarkus-solace-extra, extra properties>> to quarkus solace client in different scenarios. Please refer to https://docs.solace.com/API-Developer-Online-Ref-Documentation/pubsubplus-java/constant-values.html#com.solace.messaging.config.SolaceProperties[Solace Properties] for supported properties and definitions.
 
 {empty}1. Connecting to a standalone broker with basic authentication
 [source,yaml]
@@ -81,6 +119,15 @@ quarkus.solace.vpn=default
 quarkus.solace.authentication.basic.username=test
 quarkus.solace.authentication.basic.password=test
 ----
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=test
+quarkus.solace.password=test
+----
 
 {empty}2. Connecting to a standalone broker with TLS and basic authentication. This assumes you have a publicly signed CA.
 [source,yaml]
@@ -89,6 +136,16 @@ quarkus.solace.host=tcps://localhost:55443
 quarkus.solace.vpn=default
 quarkus.solace.authentication.basic.username=test
 quarkus.solace.authentication.basic.password=test
+----
+
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcps://localhost:55443
+quarkus.solace.vpn=default
+quarkus.solace.username=test
+quarkus.solace.password=test
 ----
 
 {empty}3. Connecting to a standalone broker with TLS, basic authentication and custom trust store which hold your CA.
@@ -101,6 +158,19 @@ quarkus.solace.authentication.basic.password=test
 quarkus.solace.tls.trust-store-path=
 quarkus.solace.tls.trust-store-type=
 quarkus.solace.tls.trust-store-password=
+----
+
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcps://localhost:55443
+quarkus.solace.vpn=default
+quarkus.solace.username=test
+quarkus.solace.password=test
+quarkus.solace.SSL_TRUST_STORE=
+quarkus.solace.SSL_TRUST_STORE_FORMAT=
+quarkus.solace.SSL_TRUST_STORE_PASSWORD=
 ----
 
 {empty}4. Connecting to a standalone broker with TLS, trust store and client certificate authentication. In case of client certificate authentication broker will read from configured username source(ex: Common Name, Subject Alt Name etc...). Refer to https://docs.solace.com/Security/Configuring-Client-Authentication.htm#Client-Cert[Solace Client Certificate Authentication].
@@ -117,12 +187,45 @@ quarkus.solace.authentication.client-cert.keystore-password=
 quarkus.solace.authentication.client-cert.keystore-format=
 ----
 
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcps://localhost:55443
+quarkus.solace.vpn=default
+quarkus.solace.AUTHENTICATION_SCHEME=AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE
+quarkus.solace.SSL_TRUST_STORE=
+quarkus.solace.SSL_TRUST_STORE_FORMAT=
+quarkus.solace.SSL_TRUST_STORE_PASSWORD=
+quarkus.solace.SSL_KEY_STORE=
+quarkus.solace.SSL_KEY_STORE_PASSWORD=
+quarkus.solace.SSL_KEY_STORE_FORMAT=
+----
+
 {empty}5. Connecting to a standalone broker with OAUTH authentication scheme.
 [source,yaml]
 ----
 quarkus.solace.host=tcp://localhost:55555
 quarkus.solace.vpn=default
 quarkus.solace.authentication.scheme=AUTHENTICATION_SCHEME_OAUTH2
+quarkus.solace.oidc.client-name=solace // client name provided in oidc client config below
+quarkus.solace.oidc.refresh.interval=50s // Refresh interval should be less than access token expiry time. Otherwise extension will fail to update access token in solace session.
+quarkus.solace.oidc.refresh.timeout=10s // Token Refresh API timeout. Default is set to 10 seconds.
+
+quarkus.oidc-client.solace.auth-server-url=http://localhost:7777/auth/realms/master
+quarkus.oidc-client.solace.client-id=<client-id>
+quarkus.oidc-client.solace.credentials.secret=<client-secret>
+# 'client' is a shortcut for `client_credentials`
+quarkus.oidc-client.solace.grant.type=client
+----
+
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.AUTHENTICATION_SCHEME=AUTHENTICATION_SCHEME_OAUTH2
 quarkus.solace.oidc.client-name=solace // client name provided in oidc client config below
 quarkus.solace.oidc.refresh.interval=50s // Refresh interval should be less than access token expiry time. Otherwise extension will fail to update access token in solace session.
 quarkus.solace.oidc.refresh.timeout=10s // Token Refresh API timeout. Default is set to 10 seconds.
@@ -157,6 +260,30 @@ quarkus.oidc-client.solace.tls.key-store-password=
 quarkus.oidc-client.solace.tls.verification=<enable-or-disable-tls-verification>
 ----
 
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcps://localhost:55443
+quarkus.solace.vpn=default
+quarkus.solace.AUTHENTICATION_SCHEME=AUTHENTICATION_SCHEME_OAUTH2
+quarkus.solace.SSL_TRUST_STORE=
+quarkus.solace.SSL_TRUST_STORE_FORMAT=
+quarkus.solace.SSL_TRUST_STORE_PASSWORD=
+quarkus.solace.oidc.client-name=solace // client name provided in oidc client config below
+quarkus.solace.oidc.refresh.interval=50s // Refresh interval should be less than access token expiry time. Otherwise extension will fail to update access token in solace session.
+quarkus.solace.oidc.refresh.timeout=10s // Token Refresh API timeout. Default is set to 10 seconds.
+
+quarkus.oidc-client.solace.auth-server-url=http://localhost:7777/auth/realms/master
+quarkus.oidc-client.solace.client-id=<client-id>
+quarkus.oidc-client.solace.credentials.secret=<client-secret>
+# 'client' is a shortcut for `client_credentials`
+quarkus.oidc-client.solace.grant.type=client
+quarkus.oidc-client.solace.tls.trust-store-file=<path-to-truststore-file>
+quarkus.oidc-client.solace.tls.key-store-password=
+quarkus.oidc-client.solace.tls.verification=<enable-or-disable-tls-verification>
+----
+
 For more details on Quarkus OIDC client supported configuration please refer to https://quarkus.io/guides/security-openid-connect-client-reference[OPENID CONNECT (OIDC) AND OAUTH2 CLIENT AND FILTERS] and https://quarkus.io/guides/security-oidc-configuration-properties-reference[OIDC configuration reference]
 
 NOTE: The current version is tested with client_credentials grant type where Solace broker is configured as Resource Server.
@@ -168,6 +295,16 @@ quarkus.solace.host=tcp://active-host-name:55555,tcp://standby-host-name:55555
 quarkus.solace.vpn=default
 quarkus.solace.authentication.basic.username=test
 quarkus.solace.authentication.basic.password=test
+----
+
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcp://active-host-name:55555,tcp://standby-host-name:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=test
+quarkus.solace.password=test
 ----
 
 In similar way other authentication mechanisms can be enabled
@@ -182,7 +319,7 @@ Reactive Messaging framework supports different messaging backends it employs a 
 
 * Messages transit on channels. Application components connect to channels to publish and consume messages. The Solace connector maps channels to Solace queues and topics.
 
-* Channels are connected to message backends using connectors. Connectors are configured to map incoming messages to a specific channel (consumed by the application) and collect outgoing messages sent to a specific channel. Each connector is dedicated to a specific messaging technology. For example, the connector dealing with Solace is named `quarkus-solace`.
+* Channels are connected to message backends using connectors. Connectors are configured to map incoming messages to a specific channel (consumed by the application) and collect outgoing messages sent to a specific channel. Each connector is dedicated to a specific messaging technology. For example, the connector dealing with Solace Java API is `quarkus-solace` and the connector dealing with Solace JCSMP API is `quarkus-solace-jcsmp`.
 
 The extension supports two types of messaging client `direct` and `persistent`. By default `persistent` client is enabled.
 
@@ -197,6 +334,19 @@ quarkus.solace.authentication.basic.username=basic
 quarkus.solace.authentication.basic.password=basic
 
 mp.messaging.incoming.temperatures.connector=quarkus-solace
+mp.messaging.incoming.temperatures.consumer.queue.name=temperatures
+----
+
+Solace JCSMP API Configuration
+
+[source,properties]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=basic
+quarkus.solace.password=basic
+
+mp.messaging.incoming.temperatures.connector=quarkus-solace-jcsmp
 mp.messaging.incoming.temperatures.consumer.queue.name=temperatures
 ----
 
@@ -215,6 +365,21 @@ mp.messaging.incoming.temperatures.consumer.queue.add-additional-subscriptions=t
 mp.messaging.incoming.temperatures.consumer.subscriptions=hello/foobar
 ----
 
+Solace JCSMP API Configuration
+
+[source,properties]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=basic
+quarkus.solace.password=basic
+
+mp.messaging.incoming.temperatures.connector=quarkus-solace-jcsmp
+mp.messaging.incoming.temperatures.consumer.queue.missing-resource-creation-strategy=create-on-start
+mp.messaging.incoming.temperatures.consumer.queue.add-additional-subscriptions=true
+mp.messaging.incoming.temperatures.consumer.subscriptions=hello/foobar
+----
+
 A minimal configuration for the Solace connector with an incoming channel and `direct` client looks like the following:
 
 [source,properties]
@@ -226,6 +391,20 @@ quarkus.solace.authentication.basic.password=basic
 
 mp.messaging.incoming.temperatures.client.type=direct
 mp.messaging.incoming.temperatures.connector=quarkus-solace
+mp.messaging.incoming.temperatures.consumer.subscriptions=sensor/temperatures
+----
+
+Solace JCSMP API Configuration
+
+[source,properties]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=basic
+quarkus.solace.password=basic
+
+mp.messaging.incoming.temperatures.client.type=direct
+mp.messaging.incoming.temperatures.connector=quarkus-solace-jcsmp
 mp.messaging.incoming.temperatures.consumer.subscriptions=sensor/temperatures
 ----
 
@@ -262,14 +441,14 @@ public class TemperaturesConsumer {
         // access record metadata
         SolaceInboundMetadata metadata = msg.getMetadata(SolaceInboundMetadata.class).orElseThrow();
         // process the message payload.
-        double temperature = Double.parseDouble(new String(p.getPayload()));
+        double temperature = Double.parseDouble(new String(msg.getPayload()));
         // Acknowledge the incoming message
         return msg.ack();
     }
 }
 ----
 
-__SolaceInboundMessage__ This is a wrapper to incoming Inbound Message from Solace Messaging API
+__InboundMessage__ This is the incoming Inbound Message from Solace Java Messaging API
 
 [source,java]
 ----
@@ -280,6 +459,22 @@ public class TemperaturesConsumer {
     public void consume(InboundMessage inboundMessage) {
         // process the message payload.
         String temperature = inboundMessage.getPayloadAsString();
+    }
+}
+----
+
+__BytesXMLMessage__ This is the incoming Inbound Message from Solace Java Messaging API
+
+[source,java]
+----
+import com.solacesystems.jcsmp.BytesXMLMessage;
+import com.solace.quarkus.messaging.converters.SolaceMessageUtils;
+@ApplicationScoped
+public class TemperaturesConsumer {
+    @Incoming("temperatures")
+    public void consume(BytesXMLMessage inboundMessage) {
+        // process the message payload.
+        String temperature = SolaceMessageUtils.getPayloadAsString(inboundMessage);
     }
 }
 ----
@@ -300,7 +495,7 @@ public class TemperaturesConsumer {
         // access record metadata
         SolaceInboundMetadata metadata = msg.getMetadata(SolaceInboundMetadata.class).orElseThrow();
         // process the message payload.
-        double temperature = Double.parseDouble(new String(p.getPayload()));
+        double temperature = Double.parseDouble(new String(msg.getPayload()));
         // Acknowledge the incoming message
         return msg.ack();
     }
@@ -336,6 +531,19 @@ mp.messaging.outgoing.temperatures-out.connector=quarkus-solace
 mp.messaging.outgoing.temperatures-out.producer.topic=temperatures
 ----
 
+Solace JCSMP API Configuration
+
+[source,properties]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=basic
+quarkus.solace.password=basic
+
+mp.messaging.outgoing.temperatures-out.connector=quarkus-solace-jcsmp
+mp.messaging.outgoing.temperatures-out.producer.topic=temperatures
+----
+
 Outgoing channel configuration to publish `direct` messages to Solace.
 
 [source,properties]
@@ -347,6 +555,20 @@ quarkus.solace.authentication.basic.password=basic
 
 mp.messaging.outgoing.temperatures-out.client.type=direct
 mp.messaging.outgoing.temperatures-out.connector=quarkus-solace
+mp.messaging.outgoing.temperatures-out.producer.topic=temperatures
+----
+
+Solace JCSMP API Configuration
+
+[source,properties]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=basic
+quarkus.solace.password=basic
+
+mp.messaging.outgoing.temperatures-out.client.type=direct
+mp.messaging.outgoing.temperatures-out.connector=quarkus-solace-jcsmp
 mp.messaging.outgoing.temperatures-out.producer.topic=temperatures
 ----
 
@@ -488,6 +710,8 @@ CAUTION: In the current version we don't recommend to use back-pressure strategy
 
 Refer to <<extension-outgoing-configuration-reference>><<quarkus-solace_quarkus.producer.back-pressure.strategy>> and <<extension-outgoing-configuration-reference>><<quarkus-solace_quarkus.producer.back-pressure.buffer-capacity>> on how to configure back-pressure for producer.
 
+NOTE: This feature is not supported in Quarkus Solace JCSMP Messaging Connector
+
 [[processing-messages]]
 == Processing Messages
 
@@ -506,7 +730,7 @@ public class TemperaturesProcessor {
     @Incoming("temperatures-in")
     @Outgoing("temperatures-out")
     public double process(byte[] temperature) {
-        return (Double.parseDouble(new String(p.getPayload())) - 32) * 5 / 9;
+        return (Double.parseDouble(new String(temperature)) - 32) * 5 / 9;
     }
 
 }
@@ -528,6 +752,24 @@ mp.messaging.incoming.temperatures.consumer.queue.name=temperatures
 mp.messaging.incoming.temperatures.client.tracing-enabled=true
 
 mp.messaging.outgoing.temperatures-out.connector=quarkus-solace
+mp.messaging.outgoing.temperatures-out.producer.topic=temperatures
+mp.messaging.outgoing.temperatures-out.client.tracing-enabled=true
+----
+
+Solace JCSMP API Configuration
+
+[source,yaml]
+----
+quarkus.solace.host=tcp://localhost:55555
+quarkus.solace.vpn=default
+quarkus.solace.username=test
+quarkus.solace.password=test
+
+mp.messaging.incoming.temperatures.connector=quarkus-solace-jcsmp
+mp.messaging.incoming.temperatures.consumer.queue.name=temperatures
+mp.messaging.incoming.temperatures.client.tracing-enabled=true
+
+mp.messaging.outgoing.temperatures-out.connector=quarkus-solace-jcsmp
 mp.messaging.outgoing.temperatures-out.producer.topic=temperatures
 mp.messaging.outgoing.temperatures-out.client.tracing-enabled=true
 ----

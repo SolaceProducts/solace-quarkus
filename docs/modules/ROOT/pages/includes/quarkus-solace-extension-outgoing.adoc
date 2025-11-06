@@ -123,6 +123,7 @@ It is possible for the client application to publish messages more quickly than 
 
 Supported strategies `reject`, `elastic`, `wait`. Refer to `https://docs.solace.com/API/API-Developer-Guide-Java/Java-PM-Publish.htm#Configuring-Back-Pressure[link]`.
 
+NOTE: Not supported in quarkus-solace-jcsmp-messaging-connector
 
 // ifdef::add-copy-button-to-env-var[]
 // Environment variable: env_var_with_copy_button:+++QUARKUS_SOLACE_DEVSERVICES_SERVICE_NAME+++[]
@@ -140,6 +141,8 @@ a| [[quarkus-solace_quarkus.producer.back-pressure.buffer-capacity]]`link:#quark
 [.description]
 --
 Outgoing messages backpressure buffer capacity.
+
+NOTE: Not supported in quarkus-solace-jcsmp-messaging-connector
 
 // ifdef::add-copy-button-to-env-var[]
 // Environment variable: env_var_with_copy_button:+++QUARKUS_SOLACE_HOST+++[]

@@ -24,6 +24,7 @@ import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.ServiceStartBuildItem;
 import io.quarkus.deployment.builditem.ShutdownContextBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.deployment.metrics.MetricsCapabilityBuildItem;
 import io.quarkus.runtime.metrics.MetricsFactory;
@@ -94,8 +95,13 @@ class SolaceProcessor {
     }
 
     @BuildStep
-    void configureNativeCompilation(BuildProducer<RuntimeInitializedClassBuildItem> producer) {
-        producer.produce(new RuntimeInitializedClassBuildItem(JCSMPFactory.class.getName()));
+    void configureNativeCompilation(BuildProducer<RuntimeInitializedClassBuildItem> runtimeInitialized,
+            BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
+        runtimeInitialized.produce(new RuntimeInitializedClassBuildItem(JCSMPFactory.class.getName()));
+        runtimeInitialized
+                .produce(new RuntimeInitializedClassBuildItem("com.solacesystems.jcsmp.JCSMPFactory$JCSMPFactoryGlobals"));
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder("io.netty.channel.epoll.EpollSocketChannel")
+                .build());
     }
 
     @BuildStep
