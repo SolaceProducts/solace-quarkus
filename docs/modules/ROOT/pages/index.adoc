@@ -25,7 +25,7 @@ For instance, with Maven, add the following dependency to your POM file:
 <dependency>
     <groupId>com.solace.quarkus</groupId>
     <artifactId>quarkus-solace-client</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
 </dependency>
 ----
 
@@ -42,13 +42,13 @@ For instance, with Maven, add the following dependency to your POM file:
 <dependency>
     <groupId>com.solace.quarkus</groupId>
     <artifactId>quarkus-solace-messaging-connector</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
 </dependency>
 ----
 
-NOTE: Solace Quarkus Extension 3.1.1 is based on Quarkus 3.15.x with Java 17 as baseline.
+NOTE: Solace Quarkus Extension 3.2.0 is based on Quarkus 3.15.x with Java 17 as baseline.
 
-Starting from 3.1.1 the extension also supports Solace JCSMP API alongside Solace Java Messaging API. This extension can be used in two ways
+Starting from 3.2.0 the extension also supports Solace JCSMP API alongside Solace Java Messaging API. This extension can be used in two ways
 
 {empty}1. `com.solace.quarkus:quarkus-solace-jcsmp-client`
 
@@ -63,7 +63,7 @@ For instance, with Maven, add the following dependency to your POM file:
 <dependency>
     <groupId>com.solace.quarkus</groupId>
     <artifactId>quarkus-solace-jcsmp-client</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
 </dependency>
 ----
 
@@ -80,7 +80,7 @@ For instance, with Maven, add the following dependency to your POM file:
 <dependency>
     <groupId>com.solace.quarkus</groupId>
     <artifactId>quarkus-solace-jcsmp-messaging-connector</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
 </dependency>
 ----
 
