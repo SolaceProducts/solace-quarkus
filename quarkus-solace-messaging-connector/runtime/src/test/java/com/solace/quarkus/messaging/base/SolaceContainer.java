@@ -15,6 +15,7 @@ import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Ulimit;
 
 public class SolaceContainer extends GenericContainer<SolaceContainer> {
 
@@ -70,8 +71,11 @@ public class SolaceContainer extends GenericContainer<SolaceContainer> {
             cmd.withUser("1000");
             cmd.getHostConfig()
                     .withShmSize(SHM_SIZE)
+                    .withMemory(2 * 1024L * 1024L * 1024L) // 2 GB RAM
+                    .withCpuCount(2_000_000_000L) // 2 CPUs
                     .withMemorySwap(-1L)
-                    .withMemoryReservation(0L);
+                    .withUlimits(List.of(
+                            new Ulimit("nofile", 2448L, 1048576L)));
         });
         this.waitStrategy = Wait.forLogMessage(SOLACE_READY_MESSAGE, 1).withStartupTimeout(Duration.ofSeconds(60));
         withExposedPorts(8080);

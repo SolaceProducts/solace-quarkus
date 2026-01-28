@@ -39,7 +39,7 @@
     <quarkus.version>3.20.5</quarkus.version>
 
     <solace.version>1.8.2</solace.version>
-    <solace.jcsmp.version>10.29.0</solace.jcsmp.version>
+    <solace.jcsmp.version>10.28.2</solace.jcsmp.version>
 
     <assertj-core.version>3.24.2</assertj-core.version>
     <weld.version>5.1.2.Final</weld.version>
