@@ -10,13 +10,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.github.dockerjava.api.model.Ulimit;
 import org.jboss.logging.Logger;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Ulimit;
 
 import io.quarkus.deployment.IsNormal;
 import io.quarkus.deployment.annotations.BuildStep;
