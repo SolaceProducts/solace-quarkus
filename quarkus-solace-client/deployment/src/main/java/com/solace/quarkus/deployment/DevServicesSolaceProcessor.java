@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.github.dockerjava.api.model.Ulimit;
 import org.jboss.logging.Logger;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -215,8 +216,11 @@ public class DevServicesSolaceProcessor {
                 cmd.withUser("1000");
                 cmd.getHostConfig()
                         .withShmSize((long) Math.pow(1024, 3))
+                        .withMemory(2 * 1024L * 1024L * 1024L) // 2 GB RAM
+                        .withCpuCount(2_000_000_000L) // 2 CPUs
                         .withMemorySwap(-1L)
-                        .withMemoryReservation(0L);
+                        .withUlimits(List.of(
+                                new Ulimit("nofile", 2448L, 1048576L)));
             });
 
             withEnv("username_admin_globalaccesslevel", "admin");
