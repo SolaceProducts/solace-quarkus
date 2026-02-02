@@ -11,6 +11,7 @@ class SolaceAckHandler {
         return Uni.createFrom().voidItem()
                 .invoke(() -> msg.getMessage().ackMessage())
                 .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
+                .emitOn(msg::runOnMessageContext)
                 .subscribeAsCompletionStage();
     }
 }
