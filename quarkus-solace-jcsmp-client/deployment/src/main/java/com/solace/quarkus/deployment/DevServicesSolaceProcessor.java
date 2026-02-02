@@ -16,6 +16,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Ulimit;
 
 import io.quarkus.deployment.IsNormal;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -215,8 +216,11 @@ public class DevServicesSolaceProcessor {
                 cmd.withUser("1000");
                 cmd.getHostConfig()
                         .withShmSize((long) Math.pow(1024, 3))
+                        .withMemory(2 * 1024L * 1024L * 1024L) // 2 GB RAM
+                        .withCpuCount(2_000_000_000L) // 2 CPUs
                         .withMemorySwap(-1L)
-                        .withMemoryReservation(0L);
+                        .withUlimits(List.of(
+                                new Ulimit("nofile", 2448L, 1048576L)));
             });
 
             withEnv("username_admin_globalaccesslevel", "admin");
