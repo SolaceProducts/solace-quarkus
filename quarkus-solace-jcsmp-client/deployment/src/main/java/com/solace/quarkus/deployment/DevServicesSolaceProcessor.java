@@ -29,14 +29,14 @@ import io.quarkus.deployment.builditem.DockerStatusBuildItem;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.console.ConsoleInstalledBuildItem;
 import io.quarkus.deployment.console.StartupLogCompressor;
-import io.quarkus.deployment.dev.devservices.GlobalDevServicesConfig;
+import io.quarkus.deployment.dev.devservices.DevServicesConfig;
 import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.devservices.common.ConfigureUtil;
 import io.quarkus.devservices.common.ContainerLocator;
 import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.configuration.ConfigUtils;
 
-@BuildSteps(onlyIfNot = IsNormal.class, onlyIf = { GlobalDevServicesConfig.Enabled.class })
+@BuildSteps(onlyIfNot = IsNormal.class, onlyIf = { DevServicesConfig.Enabled.class })
 public class DevServicesSolaceProcessor {
     private static final Logger log = Logger.getLogger(DevServicesSolaceProcessor.class);
     private static final String SOLACE_IMAGE = "solace/solace-pubsub-standard:latest";
@@ -61,7 +61,7 @@ public class DevServicesSolaceProcessor {
             Optional<ConsoleInstalledBuildItem> consoleInstalledBuildItem,
             CuratedApplicationShutdownBuildItem closeBuildItem,
             LoggingSetupBuildItem loggingSetupBuildItem,
-            GlobalDevServicesConfig devServicesConfig) {
+            DevServicesConfig devServicesConfig) {
 
         SolaceDevServiceConfig configuration = getConfiguration(config);
 
@@ -86,7 +86,7 @@ public class DevServicesSolaceProcessor {
             RunningDevService devService = startContainer(dockerStatusBuildItem,
                     configuration,
                     launchMode.getLaunchMode(),
-                    !devServicesSharedNetworkBuildItem.isEmpty(), devServicesConfig.timeout);
+                    !devServicesSharedNetworkBuildItem.isEmpty(), devServicesConfig.timeout());
 
             if (devService != null) {
                 String configKey = "quarkus.solace.host";
@@ -145,7 +145,7 @@ public class DevServicesSolaceProcessor {
             return null;
         }
 
-        if (!dockerStatusBuildItem.isDockerAvailable()) {
+        if (!dockerStatusBuildItem.isContainerRuntimeAvailable()) {
             log.warn(
                     "Please configure `quarkus.solace.host` to point to a running Solace instance or get a working docker instance");
             return null;
