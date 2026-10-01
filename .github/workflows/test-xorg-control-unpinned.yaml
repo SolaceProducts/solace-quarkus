@@ -13,4 +13,4 @@ jobs:
     steps:
       # Deliberately UNPINNED (@v4).
       - uses: actions/checkout@v4
-      - run: echo "control: unpinned regular action was allowed to run"
+      - run: echo "control - unpinned regular action was allowed to run"
