@@ -1,0 +1,16 @@
+name: Control xorg — unpinned regular action
+
+# CONTROL (DATAGO-154169): a regular action by rolling tag. Expected to be REJECTED
+# by SolaceProducts' SHA-pin enforcement, proving the policy is active here.
+on:
+  push:
+    branches:
+      - test/reusable-rolling-tag-crossorg
+
+jobs:
+  unpinned-regular-action:
+    runs-on: ubuntu-latest
+    steps:
+      # Deliberately UNPINNED (@v4).
+      - uses: actions/checkout@v4
+      - run: echo "control: unpinned regular action was allowed to run"

@@ -1,0 +1,19 @@
+name: Test xorg — public reusable by rolling tag
+
+# EXPERIMENT (DATAGO-154169): cross-org call (SolaceProducts -> SolaceDev) of a PUBLIC
+# reusable workflow by rolling branch (@main) under SolaceProducts' SHA-pin
+# enforcement — the same shape real public consumers use. cleanup_ws.yml is a no-op
+# whose job only runs on pull_request, so on push the job is skipped; the run is
+# still created only if GitHub accepted the @main reference (otherwise it would
+# startup-fail). Throwaway test branch only.
+on:
+  push:
+    branches:
+      - test/reusable-rolling-tag-crossorg
+
+jobs:
+  public-reusable-by-rolling-tag:
+    # Deliberately UNPINNED (@main).
+    uses: SolaceDev/solace-public-workflows/.github/workflows/cleanup_ws.yml@main
+    secrets:
+      ws_api_key: ${{ secrets.GITHUB_TOKEN }}  # required secret; the no-op never uses it

@@ -1,0 +1,16 @@
+name: Test xorg — maas-build-actions reusable by rolling tag
+
+# EXPERIMENT (DATAGO-154169): cross-org call (SolaceProducts -> SolaceDev) of a
+# reusable workflow by rolling branch (@master) under SolaceProducts' SHA-pin
+# enforcement. NOTE: maas-build-actions is INTERNAL and this repo is PUBLIC, so this
+# may be refused for visibility before pinning is considered — the error text tells
+# which. Throwaway test branch only.
+on:
+  push:
+    branches:
+      - test/reusable-rolling-tag-crossorg
+
+jobs:
+  maas-reusable-by-rolling-tag:
+    # Deliberately UNPINNED (@master).
+    uses: SolaceDev/maas-build-actions/.github/workflows/load-workflow-config.yaml@master

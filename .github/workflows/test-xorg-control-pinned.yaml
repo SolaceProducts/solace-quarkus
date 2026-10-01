@@ -1,0 +1,15 @@
+name: Control xorg — SHA-pinned regular action
+
+# CONTROL (DATAGO-154169): the same regular action pinned to a full SHA. Expected to
+# run, isolating the pin as the reason the unpinned sibling fails.
+on:
+  push:
+    branches:
+      - test/reusable-rolling-tag-crossorg
+
+jobs:
+  pinned-regular-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - run: echo "control: SHA-pinned regular action ran"
