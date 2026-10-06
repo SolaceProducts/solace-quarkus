@@ -112,6 +112,8 @@ public class WeldTestBase extends SolaceBaseTest {
             MapBasedConfig.cleanup();
         }
 
+        // Register the config for the current class loader: ConfigProducer looks it up without creating it
+        ConfigProvider.getConfig();
         container = weld.initialize();
     }
 
