@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.awaitility.Awaitility;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.Transferable;
-import org.testcontainers.shaded.org.apache.commons.lang3.tuple.Pair;
-import org.testcontainers.shaded.org.awaitility.Awaitility;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -38,7 +38,7 @@ public class SolaceContainer extends GenericContainer<SolaceContainer> {
 
     private String vpn = DEFAULT_VPN;
 
-    private final List<Pair<String, Service>> topicsConfiguration = new ArrayList<>();
+    private final List<Map.Entry<String, Service>> topicsConfiguration = new ArrayList<>();
 
     private boolean withClientCert;
 
@@ -155,7 +155,7 @@ public class SolaceContainer extends GenericContainer<SolaceContainer> {
 
             updateConfigScript(scriptBuilder, "message-vpn " + vpn);
             updateConfigScript(scriptBuilder, "service");
-            for (Pair<String, Service> topicConfig : topicsConfiguration) {
+            for (Map.Entry<String, Service> topicConfig : topicsConfiguration) {
                 Service service = topicConfig.getValue();
                 String topicName = topicConfig.getKey();
                 updateConfigScript(scriptBuilder, service.getName());
@@ -238,7 +238,7 @@ public class SolaceContainer extends GenericContainer<SolaceContainer> {
      * @return This container.
      */
     public SolaceContainer withTopic(String topic, Service service) {
-        topicsConfiguration.add(Pair.of(topic, service));
+        topicsConfiguration.add(Map.entry(topic, service));
         addExposedPort(service.getPort());
         return this;
     }
