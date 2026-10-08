@@ -40,7 +40,7 @@ public class KeycloakResource implements QuarkusTestResourceLifecycleManager {
                 .withPublishTopic("hello/persistent", SolaceContainer.Service.SMF);
 
         solaceContainer.start();
-        
+
         Awaitility.await().until(() -> solaceContainer.isRunning());
 
         return Map.ofEntries(
