@@ -25,6 +25,20 @@
     <url>https://github.com/SolaceProducts/solace-quarkus</url>
   </scm>
 
+  <modules>
+    <module>quarkus-solace-client</module>
+    <module>quarkus-solace-jcsmp-client</module>
+    <module>quarkus-solace-messaging-connector</module>
+    <module>quarkus-solace-jcsmp-messaging-connector</module>
+    <module>docs</module>
+    <module>samples/hello-solace</module>
+    <module>samples/hello-solace-jcsmp</module>
+    <module>samples/hello-connector-solace</module>
+    <module>samples/hello-connector-solace-jcsmp</module>
+    <module>integration-tests</module>
+    <module>integration-tests-jcsmp</module>
+  </modules>
+
   <properties>
     <!-- Project Versioning Properties -->
 		<revision>3.3.1</revision>
@@ -36,7 +50,7 @@
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus.version>3.27.2</quarkus.version>
+    <quarkus.version>3.33.4</quarkus.version>
 
     <solace.version>1.8.2</solace.version>
     <solace.jcsmp.version>10.28.2</solace.jcsmp.version>

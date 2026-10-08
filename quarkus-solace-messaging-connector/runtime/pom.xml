@@ -103,8 +103,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.smallrye</groupId>
-            <artifactId>smallrye-metrics</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
