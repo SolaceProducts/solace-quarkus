@@ -1,7 +1,7 @@
 package com.solace.quarkus.messaging.base;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.time.Duration;
 

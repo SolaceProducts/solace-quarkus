@@ -12,17 +12,25 @@ import com.solacesystems.jcsmp.*;
 
 import io.quarkus.arc.SyntheticCreationalContext;
 import io.quarkus.logging.Log;
+import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.ShutdownContext;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class SolaceRecorder {
+
+    private final RuntimeValue<SolaceConfig> runtimeConfig;
+
+    public SolaceRecorder(RuntimeValue<SolaceConfig> runtimeConfig) {
+        this.runtimeConfig = runtimeConfig;
+    }
+
     private JCSMPSession service;
     private static final TypeLiteral<Instance<MessagingServiceClientCustomizer>> CUSTOMIZER = new TypeLiteral<>() {
     };
 
-    public Function<SyntheticCreationalContext<JCSMPSession>, JCSMPSession> init(SolaceConfig config,
-            ShutdownContext shutdown) {
+    public Function<SyntheticCreationalContext<JCSMPSession>, JCSMPSession> init(ShutdownContext shutdown) {
+        SolaceConfig config = runtimeConfig.getValue();
         return new Function<>() {
             @Override
             public JCSMPSession apply(SyntheticCreationalContext<JCSMPSession> context) {

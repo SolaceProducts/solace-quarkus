@@ -17,17 +17,24 @@ import com.solace.quarkus.MessagingServiceClientCustomizer;
 
 import io.quarkus.arc.SyntheticCreationalContext;
 import io.quarkus.logging.Log;
+import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.ShutdownContext;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class SolaceRecorder {
 
+    private final RuntimeValue<SolaceConfig> runtimeConfig;
+
+    public SolaceRecorder(RuntimeValue<SolaceConfig> runtimeConfig) {
+        this.runtimeConfig = runtimeConfig;
+    }
+
     private static final TypeLiteral<Instance<MessagingServiceClientCustomizer>> CUSTOMIZER = new TypeLiteral<>() {
     };
 
-    public Function<SyntheticCreationalContext<MessagingService>, MessagingService> init(SolaceConfig config,
-            ShutdownContext shutdown) {
+    public Function<SyntheticCreationalContext<MessagingService>, MessagingService> init(ShutdownContext shutdown) {
+        SolaceConfig config = runtimeConfig.getValue();
         return new Function<>() {
             @Override
             public MessagingService apply(SyntheticCreationalContext<MessagingService> context) {

@@ -1,6 +1,6 @@
 package com.solace.quarkus.messaging;
 
-import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 
 import java.io.*;
 import java.security.KeyStore;

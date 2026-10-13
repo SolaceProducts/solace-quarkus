@@ -11,7 +11,6 @@ import org.jboss.jandex.*;
 import com.solace.messaging.MessagingService;
 import com.solace.quarkus.MessagingServiceClientCustomizer;
 import com.solace.quarkus.runtime.OidcProvider;
-import com.solace.quarkus.runtime.SolaceConfig;
 import com.solace.quarkus.runtime.SolaceRecorder;
 import com.solace.quarkus.runtime.observability.SolaceMetricBinder;
 import com.solacesystems.jcsmp.JCSMPFactory;
@@ -59,11 +58,11 @@ class SolaceProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     ServiceStartBuildItem init(
-            SolaceConfig config, SolaceRecorder recorder,
+            SolaceRecorder recorder,
             ShutdownContextBuildItem shutdown, BuildProducer<SyntheticBeanBuildItem> syntheticBeans,
             BuildProducer<AdditionalBeanBuildItem> additionalBeanBuildItemBuildProducer) {
 
-        Function<SyntheticCreationalContext<MessagingService>, MessagingService> function = recorder.init(config, shutdown);
+        Function<SyntheticCreationalContext<MessagingService>, MessagingService> function = recorder.init(shutdown);
 
         additionalBeanBuildItemBuildProducer.produce(AdditionalBeanBuildItem.unremovableOf(OidcProvider.class));
 
