@@ -24,6 +24,7 @@
     <developerConnection>scm:git:git@github.com:SolaceProducts/solace-quarkus.git</developerConnection>
     <url>https://github.com/SolaceProducts/solace-quarkus</url>
   </scm>
+  
   <properties>
     <!-- Project Versioning Properties -->
 		<revision>3.3.1</revision>
