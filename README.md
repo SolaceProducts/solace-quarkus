@@ -1,6 +1,6 @@
 # Quarkus Solace
 
-[![Version](https://img.shields.io/maven-central/v/com.solace.quarkus/quarkus-solace?logo=apache-maven&style=flat-square)](https://search.maven.org/artifact/com.solace.quarkus/quarkus-solace)
+[![Version](https://img.shields.io/maven-central/v/com.solace.quarkus/quarkus-solace-client?logo=apache-maven&style=flat-square)](https://central.sonatype.com/search?q=quarkus-solace)
 
 ## About Solace Quarkus Extension
 
