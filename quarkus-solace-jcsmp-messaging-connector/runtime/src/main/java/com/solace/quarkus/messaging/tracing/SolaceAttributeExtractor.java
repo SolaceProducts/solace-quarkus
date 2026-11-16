@@ -64,18 +64,8 @@ public class SolaceAttributeExtractor implements AttributesExtractor<SolaceTrace
         }
 
         @Override
-        public Long getMessagePayloadSize(final SolaceTrace solaceTrace) {
-            return solaceTrace.getPayloadSize();
-        }
-
-        @Override
-        public Long getMessagePayloadCompressedSize(final SolaceTrace solaceTrace) {
-            return null;
-        }
-
-        @Override
         public Long getMessageBodySize(SolaceTrace solaceTrace) {
-            return 0L;
+            return solaceTrace.getPayloadSize();
         }
 
         @Override
